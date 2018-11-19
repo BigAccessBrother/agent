@@ -1,0 +1,18 @@
+{
+  "name": "bab-agent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.propulsion-home.ch:full-stack/batch-2018-09/personal-projects/bab/agent.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^3.0.9"
+  }
+}
