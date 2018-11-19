@@ -1,5 +1,6 @@
 import React from 'react';
 import { mainStyle, text } from './styles'
+import getWindows from './getInfo/windows';
 const { exec } = require('child_process');
 // import './main.css';
 
@@ -15,17 +16,18 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    exec(
-      'powershell -command "Get-MpComputerStatus"',
-      (err, stdout, stderr) => {
-        console.log(1, stdout);
-        let arr = stdout.split('\n').filter(info => info.length > 2);
-        console.log(2, arr)
-        this.setState({
-          test: arr
-        })
-      }
-    );
+    // exec(
+    //   'powershell -command "Get-MpComputerStatus"',
+    //   (err, stdout, stderr) => {
+    //     console.log(1, stdout);
+    //     let arr = stdout.split('\n').filter(info => info.length > 2);
+    //     console.log(2, arr)
+    //     this.setState({
+    //       test: arr
+    //     })
+    //   }
+    // );
+    getWindows();
   }
 
   // test() {
