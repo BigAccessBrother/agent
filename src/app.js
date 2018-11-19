@@ -1,5 +1,6 @@
 import React from 'react';
-import { mainStyle } from './styles'
+import { mainStyle, text } from './styles'
+const { exec } = require('child_process');
 // import './main.css';
 
 
@@ -9,22 +10,48 @@ export default class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      test: 0
+      test: ['loading...']
     }
   }
 
-  test() {
-    this.setState({
-      test: this.state.test + 1
-    })
+  componentDidMount() {
+    exec(
+      'powershell -command "Get-MpComputerStatus"',
+      (err, stdout, stderr) => {
+        console.log(1, stdout);
+        let arr = stdout.split('\n').filter(info => info.length > 2);
+        console.log(2, arr)
+        this.setState({
+          test: arr
+        })
+      }
+    );
   }
+
+  // test() {
+  //   exec(
+  //     'powershell -command "Get-MpComputerStatus"',
+  //     (err, stdout, stderr) => {
+  //       console.log(1, stdout);
+  //       let arr = stdout.split('\n');
+  //       console.log(2, arr)
+  //       this.setState({
+  //         test: arr
+  //       })
+  //     }
+  //   );
+  // }
 
   render() {
     return (
       <div style={ mainStyle } >
-          <h2>Welcome to React!</h2>
-          <button onClick={ this.test.bind(this) } >test</button>
-          <p>{ this.state.test }</p>
+          <h2>BAB status report:</h2>
+          {/* <button onClick={ this.test.bind(this) } >test</button> */}
+          <ul style={ text } >
+          { this.state.test.map(
+              info => <li key={ info }>{ info }</li> 
+            ) }
+          </ul>
       </div>
     );
   }
