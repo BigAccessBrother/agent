@@ -1,5 +1,7 @@
 import React from 'react';
-import { mainStyle } from './styles'
+import { mainStyle, text } from './styles'
+import getWindows from './getInfo/windows';
+const { exec } = require('child_process');
 // import './main.css';
 
 
@@ -9,22 +11,27 @@ export default class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      test: 0
+      test: ['loading...']
     }
   }
 
-  test() {
-    this.setState({
-      test: this.state.test + 1
-    })
+  componentDidMount() {
+    getWindows().then(
+      resolve => { 
+        console.log('in da component', resolve);
+      }
+    )
   }
 
   render() {
     return (
       <div style={ mainStyle } >
-          <h2>Welcome to React!</h2>
-          <button onClick={ this.test.bind(this) } >test</button>
-          <p>{ this.state.test }</p>
+          <h2>BAB status report:</h2>
+          <ul style={ text } >
+          { this.state.test.map(
+              info => <li key={ info }>{ info }</li> 
+            ) }
+          </ul>
       </div>
     );
   }
