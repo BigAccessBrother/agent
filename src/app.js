@@ -11,7 +11,7 @@ export default class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      test: ['loading...']
+      message: 'loading...'
     }
   }
 
@@ -19,6 +19,7 @@ export default class App extends React.Component {
     getWindows().then(
       resolve => { 
         console.log('in da component', resolve);
+        this.setState({ message: 'data collected' });
       }
     )
   }
@@ -27,11 +28,9 @@ export default class App extends React.Component {
     return (
       <div style={ mainStyle } >
           <h2>BAB status report:</h2>
-          <ul style={ text } >
-          { this.state.test.map(
-              info => <li key={ info }>{ info }</li> 
-            ) }
-          </ul>
+          <div style={ text } >
+          { this.state.message }
+          </div>
       </div>
     );
   }
