@@ -45,8 +45,7 @@ const commands = [
     'wmic product | more'
 ]
 
-const getValues = (obj, keys, res = {}) => {
-    const arr = obj.stdout.split('\n').filter(e => e.length > 2)
+const getValues = (arr, keys, res = {}) => {
     // search for keys in arr and push them and them + values to res
     keys.forEach(key => {
         arr.forEach(string => {
@@ -58,8 +57,54 @@ const getValues = (obj, keys, res = {}) => {
     return res
 }
 
+const getStartup = (arr1, res = []) => {
+    // get rid of that one line that was too long and put on a new line
+    const arr = arr1.map((e, i, arr) => {
+        if(e.includes(':')) {
+            if (arr[i + 1] && !arr[i + 1].includes(':')) {
+                return e + arr[i + 1].trim()
+            }
+            return e
+        }
+    }).filter(e => e && e.includes(':'));
+    // turn 4 lines at a time into an object
+    for (let i = 0; i < arr.length / 4; i++) {
+        res.push({
+            name: arr[i * 4].split(':')[1].trim(),
+            command: arr[i * 4 + 1].split(':')[1].trim(),
+            location: arr[i * 4 + 2].split(':')[1].trim(),
+            user: arr[i * 4 + 3].split(':')[1].trim(),
+        })
+    }
+    return { startup_apps: res }
+}
+
+// get the entry starting at a particular index out of a long string
+const getKeyword = (str, indKey) => str.substring(indKey, str.indexOf('  ', indKey))
+
+const getInstalled = (arr, res = []) => {
+    // find out where in lines our info sits
+    const indName = arr[0].indexOf('Name');
+    const indVendor = arr[0].indexOf('Vendor');
+    const indVersion = arr[0].indexOf('Version');
+    const indDate = arr[0].indexOf('InstallDate');
+    // retrieve our info from every line and push it to res as an object
+    for (let i = 1; i < arr.length; i++) {
+        res.push({
+            name: getKeyword(arr[i], indName),
+            vendor: getKeyword(arr[i], indVendor),
+            version: getKeyword(arr[i], indVersion),
+            install_date: getKeyword(arr[i], indDate)
+        });
+    }
+    return { installed_apps: res }
+}
+
 const getAsync = async cmds => {
-    const arr = cmds.map(async cmd => await exec(cmd))
+    const arr = cmds.map(async cmd => {
+        const res = await exec(cmd)
+        return res.stdout.split('\n').filter(e => e.length > 2)
+    })
     return Promise.all(arr).then(
         values => { 
             const data = [
@@ -67,12 +112,10 @@ const getAsync = async cmds => {
                 getValues(values[1], keysAll[1]),
                 getValues(values[2], keysAll[2]),
                 getValues(values[3], keysAll[3]),
+                getStartup(values[4]),
+                getInstalled(values[5])
             ];
-            return Object.assign(
-                ...data,
-                { list_of_startup_apps: values[4].stdout },
-                { list_of_installed_apps: values[5].stdout }
-            );
+            return Object.assign(...data);
         }
     )
 }
