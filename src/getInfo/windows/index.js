@@ -79,8 +79,25 @@ const getStartup = (arr1, res = []) => {
     return { startup_apps: res }
 }
 
-const getInstalled = (obj, res = []) => {
-    return true
+// get the entry starting at a particular index out of a long string
+const getKeyword = (str, indKey) => str.substring(indKey, str.indexOf('  ', indKey))
+
+const getInstalled = (arr, res = []) => {
+    // find out where in lines our info sits
+    const indName = arr[0].indexOf('Name');
+    const indVendor = arr[0].indexOf('Vendor');
+    const indVersion = arr[0].indexOf('Version');
+    const indDate = arr[0].indexOf('InstallDate');
+    // retrieve our info from every line and push it to res as an object
+    for (let i = 1; i < arr.length; i++) {
+        res.push({
+            name: getKeyword(arr[i], indName),
+            vendor: getKeyword(arr[i], indVendor),
+            version: getKeyword(arr[i], indVersion),
+            install_date: getKeyword(arr[i], indDate)
+        });
+    }
+    return { installed_apps: res }
 }
 
 const getAsync = async cmds => {
@@ -96,11 +113,9 @@ const getAsync = async cmds => {
                 getValues(values[2], keysAll[2]),
                 getValues(values[3], keysAll[3]),
                 getStartup(values[4]),
+                getInstalled(values[5])
             ];
-            return Object.assign(
-                ...data,
-                // { list_of_installed_apps: values[5] }
-            );
+            return Object.assign(...data);
         }
     )
 }
