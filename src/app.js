@@ -16,7 +16,11 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    getWindows();
+    getWindows().then(
+      resolve => { 
+        console.log('in da component', resolve);
+      }
+    )
   }
 
   render() {

@@ -1,12 +1,5 @@
-
-import { exec } from 'child_process';
-
-// turn execs in to promises and resolve them all at once!
-
-// const util = require('util');
-// const exec = util.promisify(require('child_process').exec);
-
-// also, make an object out of this mess!
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 const keysSys = [
     'OS Name', 
@@ -36,63 +29,56 @@ const keysSec = [
 
 const keysEncr = ['Protection Status']
 
+const keysAll = [
+    keysSerial,
+    keysSys,
+    keysSec,
+    keysEncr
+]
 
-const getArr = (cmd, callback) => {
-    exec(
-        cmd,
-        (err, stdout, stderr) => {
-            // splitting output to array and removing empty lines
-            let arr = stdout.split('\n').filter(info => info.length > 2);
-            callback(arr);
-        }
-    )
-}
+const commands = [
+    'powershell -command "gwmi win32_bios | fl SerialNumber"',
+    'systeminfo', 
+    'powershell -command "Get-MpComputerStatus"',
+    'manage-bde -status C:',
+    'powershell -command "Get-CimInstance Win32_StartupCommand | Select-Object Name, command, Location, User | Format-List"',
+    'wmic product | more'
+]
 
-const getValues = (res, keys) => arr => {
+const getValues = (obj, keys, res = {}) => {
+    const arr = obj.stdout.split('\n').filter(e => e.length > 2)
     // search for keys in arr and push them and them + values to res
     keys.forEach(key => {
         arr.forEach(string => {
             if (string.includes(key)) {
                 res[key] = string.split(':')[1].trim();
-                console.log(Object.keys(res).length, res);
             }
         });
     });
+    return res
 }
 
+const getAsync = async cmds => {
+    const arr = cmds.map(async cmd => await exec(cmd))
+    return Promise.all(arr).then(
+        values => { 
+            const data = [
+                getValues(values[0], keysAll[0]),
+                getValues(values[1], keysAll[1]),
+                getValues(values[2], keysAll[2]),
+                getValues(values[3], keysAll[3]),
+            ];
+            return Object.assign(
+                ...data,
+                { list_of_startup_apps: values[4].stdout },
+                { list_of_installed_apps: values[5].stdout }
+            );
+        }
+    )
+}
 
 const getWindows = () => {
-    let res = {}
-    
-    getArr(
-        'powershell -command "gwmi win32_bios | fl SerialNumber"', 
-        getValues(res, keysSerial)
-    );
-    getArr(
-        'systeminfo', 
-        getValues(res, keysSys)
-    );
-    getArr(
-        'powershell -command "Get-MpComputerStatus"', 
-        getValues(res, keysSec)
-    );
-    getArr(
-        'manage-bde -status C:', 
-        getValues(res, keysEncr)
-    );
-    getArr(
-        'powershell -command "Get-CimInstance Win32_StartupCommand | Select-Object Name, command, Location, User | Format-List"', 
-        arr => {
-            res['list_of_start_up_apps'] = arr;
-        }
-    );
-    getArr(
-        'wmic product | more', 
-        arr => {
-            res['list_of_installed_apps'] = arr
-        }
-    );
-
+    return getAsync(commands);
 }
 
 export default getWindows;
