@@ -9,7 +9,11 @@
 <script>
 import CollectingData from './components/CollectingData';
 import SendingRequest from './components/SendingRequest';
+import ResponsePositive from './components/ResponsePositive';
+import ResponseNegative from './components/ResponseNegative';
 import scanWindows from './utils/scanWindows';
+import { baseAPIUrl } from './constants';
+import POSTResponse from './utils/requests/POSTResponse';
 
 export default {
   el: '#app',
@@ -21,14 +25,23 @@ export default {
   },
   components: {
     CollectingData,
-    SendingRequest
+    SendingRequest,
+    ResponsePositive,
+    ResponseNegative
   },
   created () {
     console.log('in da create')
+    // get scanData
     scanWindows()
     .then(resolve => {
       console.log(resolve)
       this.status = 'sending-request';
+      // send scanData
+      POSTResponse().then(response => { 
+        console.log(response)
+        // change UI depending on response
+        this.status = response.ok ? 'response-positive' : 'response-negative'
+      });
     });
   }
 }

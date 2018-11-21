@@ -9,3 +9,14 @@ body {
 h1, h2, h3, .text-center {
     text-align: center;
 }
+
+.positive {
+    border: 5px solid green;
+    border-radius: 5px;
+    padding: 10px;
+}
+.negative {
+    border: 5px solid red;
+    border-radius: 5px;
+    padding: 10px;
+}
