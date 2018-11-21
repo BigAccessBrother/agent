@@ -19,7 +19,7 @@ export default class App extends React.Component {
     getWindows().then(
       resolve => { 
         console.log('in da component', resolve);
-        this.setState({ message: 'data collected' });
+        this.setState({ message: '', data: resolve });
       }
     )
   }
@@ -29,7 +29,16 @@ export default class App extends React.Component {
       <div style={ mainStyle } >
           <h2>BAB status report:</h2>
           <div style={ text } >
-          { this.state.message }
+          { this.state.message ?
+          this.state.message :
+          <ul> {
+          Object.keys(this.state.data).map(key => {
+            return <li key={key}>{key}: {
+              Array.isArray(this.state.data[key]) 
+              ? `[list of ${this.state.data[key].length} apps]` 
+              : this.state.data[key]}</li>
+          }) } </ul> 
+          }
           </div>
       </div>
     );
