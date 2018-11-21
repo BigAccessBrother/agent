@@ -17,9 +17,9 @@ const commands = [
 const keysSerial = [['SerialNumber', 'system_serial_number']];
 
 const keysSys = [
-    ['OS Name', 'os_name'], 
+    ['OS Name', 'os_type'], 
     ['OS Version', 'os_version'],
-    ['OS Manufacturer', 'os_manufacturer'],
+    ['System Manufacturer', 'system_manufacturer'],
     ['System Model', 'system_model'],
     ['System Type', 'system_type'],
     ['BIOS Version', 'bios_version'],
@@ -44,15 +44,20 @@ const keysEncr = [['Protection Status', 'protection_status']]
 
 const keysAll = [keysSerial, keysSys, keysSec, keysEncr]
 
+// turning "True" into true and "False" into false
+const boolify = (str) => str.toLowerCase() === 'true' ? true :
+                            str.toLowerCase() === 'false' ? false : str
+
 // getting key values out of basic cmd output array
 const getValues = (arr, keys, res = {}) => {
     // search for keys in arr and push them and them + values to res
     keys.forEach(key => {
-        arr.forEach(string => {
-            if (string.includes(key[0])) {
-                res[key[1]] = string.split(':')[1].trim();
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].includes(key[0])) {
+                res[key[1]] = boolify(arr[i].split(':')[1].trim());
+                break;
             }
-        });
+        }
     });
     return res
 }
@@ -115,11 +120,12 @@ const getAsync = async cmds => {
         values => { 
             const data = [
                 getValues(values[0], keysAll[0]),
+                { agent_version: process.env.npm_package_version },
                 getValues(values[1], keysAll[1]),
                 getValues(values[2], keysAll[2]),
                 getValues(values[3], keysAll[3]),
                 getStartup(values[4]),
-                getInstalled(values[5])
+                getInstalled(values[5]),
             ];
             // turn all the outputs into one single object
             return Object.assign(...data);
