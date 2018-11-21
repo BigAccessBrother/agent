@@ -120,11 +120,12 @@ const getAsync = async cmds => {
         values => { 
             const data = [
                 getValues(values[0], keysAll[0]),
+                { agent_version: process.env.npm_package_version },
                 getValues(values[1], keysAll[1]),
                 getValues(values[2], keysAll[2]),
                 getValues(values[3], keysAll[3]),
                 getStartup(values[4]),
-                getInstalled(values[5])
+                getInstalled(values[5]),
             ];
             // turn all the outputs into one single object
             return Object.assign(...data);
