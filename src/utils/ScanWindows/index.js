@@ -129,8 +129,8 @@ const getAsync = async cmds => {
 
 // what we export:
 // this returns the promise of a nicely formatted object for the body of a post request
-const getWindows = () => {
+const scanWindows = () => {
     return getAsync(commands);
 }
 
-export default getWindows;
+export default scanWindows;
