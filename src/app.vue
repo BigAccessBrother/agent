@@ -13,8 +13,7 @@ import ResponsePositive from './components/ResponsePositive';
 import ResponseNegative from './components/ResponseNegative';
 import AgentRegistration from './components/AgentRegistration';
 import scanWindows from './utils/scanWindows';
-import { makeRequest } from './constants';
-import POSTResponse from './utils/requests/POSTResponse';
+import { makeRequest } from './utils/requests';
 
 export default {
   el: '#app',
