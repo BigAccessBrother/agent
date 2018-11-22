@@ -1,6 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: sans-serif;
-    font-weight: 600;
+    font-weight: 500;
     color: rgb(255, 255, 255);
     background-color: rgb(9, 45, 65);
     text-align: center;
@@ -11,12 +15,27 @@ h1, h2, h3, .text-center {
 }
 
 .positive {
-    border: 5px solid green;
-    border-radius: 5px;
+    background-color:  rgba(0, 128, 0, 0.253);
+    border: 10px solid rgb(0, 119, 0);
+    border-radius: 500px;
     padding: 10px;
+    margin: auto;
+    width: 75vw;
+    height: 75vw;
 }
 .negative {
-    border: 5px solid red;
-    border-radius: 5px;
-    padding: 10px;
+    background-color: rgba(255, 0, 0, 0.158);
+    border: 10px solid red;
+    border-radius: 500px;
+    padding: 20px 10px;
+}
+
+input {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 3px;
+    border-width: 3px;
+    border: 3px solid white;
+    box-shadow: 0px 1px 4px white;
+    font-weight: 600;
 }

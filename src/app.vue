@@ -11,9 +11,9 @@ import CollectingData from './components/CollectingData';
 import SendingRequest from './components/SendingRequest';
 import ResponsePositive from './components/ResponsePositive';
 import ResponseNegative from './components/ResponseNegative';
+import AgentRegistration from './components/AgentRegistration';
 import scanWindows from './utils/scanWindows';
-import { baseAPIUrl } from './constants';
-import POSTResponse from './utils/requests/POSTResponse';
+import { makeRequest } from './utils/requests';
 
 export default {
   el: '#app',
@@ -27,17 +27,22 @@ export default {
     CollectingData,
     SendingRequest,
     ResponsePositive,
-    ResponseNegative
+    ResponseNegative,
+    AgentRegistration
   },
   created () {
     console.log('in da create')
     // get scanData
     scanWindows()
-    .then(resolve => {
-      console.log(resolve)
+    .then(data => {
+      console.log(data)
       this.status = 'sending-request';
       // send scanData
-      POSTResponse().then(response => { 
+      // makeRequest('response/', 'POST', data).then(response => {
+      //   console.log('in da makeRequest', response)
+      //   this.status = response.ok ? 'response-positive' : 'response-negative'
+      // })
+      makeRequest('home/').then(response => { 
         console.log(response)
         // change UI depending on response
         this.status = response.ok ? 'response-positive' : 'response-negative'
