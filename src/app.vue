@@ -13,7 +13,7 @@ import ResponsePositive from './components/ResponsePositive';
 import ResponseNegative from './components/ResponseNegative';
 import AgentRegistration from './components/AgentRegistration';
 import scanWindows from './utils/scanWindows';
-import { baseAPIUrl } from './constants';
+import { makeRequest } from './constants';
 import POSTResponse from './utils/requests/POSTResponse';
 
 export default {
@@ -21,7 +21,7 @@ export default {
   name: 'app',
   data () {
     return {
-       status: 'agent-registration'
+       status: 'collecting-data'
     }
   },
   components: {
@@ -31,20 +31,24 @@ export default {
     ResponseNegative,
     AgentRegistration
   },
-  // created () {
-  //   console.log('in da create')
-  //   // get scanData
-  //   scanWindows()
-  //   .then(resolve => {
-  //     console.log(resolve)
-  //     this.status = 'sending-request';
-  //     // send scanData
-  //     POSTResponse().then(response => { 
-  //       console.log(response)
-  //       // change UI depending on response
-  //       this.status = response.ok ? 'response-positive' : 'response-negative'
-  //     });
-  //   });
-  // }
+  created () {
+    console.log('in da create')
+    // get scanData
+    scanWindows()
+    .then(data => {
+      console.log(data)
+      this.status = 'sending-request';
+      // send scanData
+      // makeRequest('response/', 'POST', data).then(response => {
+      //   console.log('in da makeRequest', response)
+      //   this.status = response.ok ? 'response-positive' : 'response-negative'
+      // })
+      makeRequest('home/').then(response => { 
+        console.log(response)
+        // change UI depending on response
+        this.status = response.ok ? 'response-positive' : 'response-negative'
+      });
+    });
+  }
 }
 </script>
