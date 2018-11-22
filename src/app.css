@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: sans-serif;
     font-weight: 600;
@@ -11,12 +15,17 @@ h1, h2, h3, .text-center {
 }
 
 .positive {
-    border: 5px solid green;
-    border-radius: 5px;
+    background-color:  rgba(0, 128, 0, 0.253);
+    border: 10px solid rgb(0, 119, 0);
+    border-radius: 500px;
     padding: 10px;
+    margin: auto;
+    width: 75vw;
+    height: 75vw;
 }
 .negative {
-    border: 5px solid red;
-    border-radius: 5px;
-    padding: 10px;
+    background-color: rgba(255, 0, 0, 0.158);
+    border: 10px solid red;
+    border-radius: 500px;
+    padding: 20px 10px;
 }
