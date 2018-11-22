@@ -1,8 +1,11 @@
 <template>
     <div class="positive">
         <br>
-        <div>request successful</div>
-        <div>your machine is protected and good to go!</div>
+        <img 
+            src="./assets/icons/checkbox-marked-circle-outline.png"
+            alt="check"
+        >
+        <div>you are safe to go!</div>
     </div>
 </template>
 

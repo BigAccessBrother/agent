@@ -13,7 +13,7 @@ const init = {
 // }
 
 export default async () => fetch(baseAPIUrl + 'home/', init);
-// export default fetch(baseAPIUrl + 'agent/response/', init2)
+// export default fetch(baseAPIUrl + 'response/', init2)
 
 
 // https.get('https://swapi.co/api/people/1/', res => {
