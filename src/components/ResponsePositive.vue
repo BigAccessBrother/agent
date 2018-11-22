@@ -5,7 +5,7 @@
             src="./assets/icons/checkbox-marked-circle-outline.png"
             alt="check"
         >
-        <div>you are safe to go!</div>
+        <div>you are good to go!</div>
     </div>
 </template>
 
