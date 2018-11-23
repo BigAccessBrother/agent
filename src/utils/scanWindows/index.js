@@ -13,7 +13,7 @@ const commands = [
     'wmic product | more'
 ]
 
-// all the keys we are looking for, paird with how they should be called in our request
+// all the keys we are looking for, paired with how they should be called in our request
 const keysSerial = [['SerialNumber', 'system_serial_number']];
 
 const keysSys = [
@@ -45,8 +45,11 @@ const keysEncr = [['Protection Status', 'protection_status']]
 const keysAll = [keysSerial, keysSys, keysSec, keysEncr]
 
 // turning "True" into true and "False" into false
-const boolify = (str) => str.toLowerCase() === 'true' ? true :
+const boolify = str => str.toLowerCase() === 'true' ? true :
                             str.toLowerCase() === 'false' ? false : str
+
+// getting the value after ':'
+const val = str => str.substring(str.indexOf(':') + 1).trim()
 
 // getting key values out of basic cmd output array
 const getValues = (arr, keys, res = {}) => {
@@ -54,7 +57,7 @@ const getValues = (arr, keys, res = {}) => {
     keys.forEach(key => {
         for (let i = 0; i < arr.length; i++) {
             if (arr[i].includes(key[0])) {
-                res[key[1]] = boolify(arr[i].split(':')[1].trim());
+                res[key[1]] = boolify(val(arr[i]));
                 break;
             }
         }
@@ -76,10 +79,10 @@ const getStartup = (arr1, res = []) => {
     // turn 4 lines at a time into an object
     for (let i = 0; i < arr.length / 4; i++) {
         res.push({
-            name: arr[i * 4].split(':')[1].trim(),
-            command: arr[i * 4 + 1].split(':')[1].trim(),
-            location: arr[i * 4 + 2].split(':')[1].trim(),
-            user: arr[i * 4 + 3].split(':')[1].trim(),
+            name: val(arr[i * 4]),
+            command: val(arr[i * 4 + 1]),
+            location: val(arr[i * 4 + 2]),
+            user: val(arr[i * 4 + 3]),
         })
     }
     return { startup_apps: res }
