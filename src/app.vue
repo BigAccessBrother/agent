@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     register () {
-      console.log('in da app.vue register');
+      console.log('In da app.vue after successful registration. Should scan again now!');
     }
   },
   created () {
