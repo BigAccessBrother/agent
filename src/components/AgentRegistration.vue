@@ -23,7 +23,7 @@
         methods: {
             register () {
                 const body = {
-                    username: this.email,
+                    email: this.email,
                     password: this.password,
                     system_serial_number: this.number
                 }
