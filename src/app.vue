@@ -2,7 +2,11 @@
   <div>
     <h2>BAB Agent</h2>
     <!-- <div class="text-center"> {{status}} </div> -->
-    <component v-bind:is="status"></component>
+    <component 
+      v-bind:is="status"
+      v-on:register-agent="register"
+      :number="number"
+    ></component>
   </div>
 </template>
 
@@ -20,7 +24,7 @@ export default {
   name: 'app',
   data () {
     return {
-       status: 'collecting-data'
+       status: 'collecting-data',
     }
   },
   components: {
@@ -30,23 +34,28 @@ export default {
     ResponseNegative,
     AgentRegistration
   },
+  methods: {
+    register () {
+      console.log('In da app.vue after successful registration. Should scan again now!');
+    }
+  },
   created () {
-    console.log('in da create')
     // get scanData
     scanWindows()
     .then(data => {
-      console.log(data)
+      console.log('scan successful', data)
       this.status = 'sending-request';
+      this.number = data.system_serial_number;
       // send scanData
-      // makeRequest('response/', 'POST', data).then(response => {
-      //   console.log('in da makeRequest', response)
-      //   this.status = response.ok ? 'response-positive' : 'response-negative'
-      // })
-      makeRequest('home/').then(response => { 
-        console.log(response)
-        // change UI depending on response
-        this.status = response.ok ? 'response-positive' : 'response-negative'
-      });
+      makeRequest('response/', 'POST', data).then(response => {
+        console.log('posted agent response', response)
+        this.status = response.ok ? 'response-positive' : 'agent-registration'
+      })
+      // makeRequest('home/asdasd').then(response => { 
+      //   console.log(response)
+      //   // change UI depending on response
+      //   this.status = response.ok ? 'response-positive' : 'agent-registration'
+      // });
     });
   }
 }
