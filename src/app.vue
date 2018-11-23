@@ -49,7 +49,11 @@ export default {
       // send scanData
       makeRequest('response/', 'POST', data).then(response => {
         console.log('posted agent response', response)
-        this.status = response.ok ? 'response-positive' : 'agent-registration'
+        
+        response.json().then(responseData => { 
+          console.log(responseData) 
+          this.status = responseData.status === 'ok' ? 'response-positive' : 'response-negative'
+        })
       })
       // makeRequest('home/asdasd').then(response => { 
       //   console.log(response)
