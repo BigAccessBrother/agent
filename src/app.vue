@@ -18,6 +18,7 @@ import ResponseNegative from './components/ResponseNegative';
 import AgentRegistration from './components/AgentRegistration';
 import scanWindows from './utils/scanWindows';
 import { makeRequest } from './utils/requests';
+import scanWindosAndPost from './utils/requests/scanWindowsAndPost';
 
 export default {
   el: '#app',
@@ -37,26 +38,11 @@ export default {
   methods: {
     register () {
       console.log('In da app.vue after successful registration. Should scan again now!');
+      scanWindosAndPost(this)
     }
   },
   created () {
-    // get scanData
-    scanWindows()
-    .then(data => {
-      console.log('scan successful', data)
-      this.status = 'sending-request';
-      this.number = data.system_serial_number;
-      // send scanData
-      makeRequest('response/', 'POST', data).then(response => {
-        console.log('posted agent response', response)
-        this.status = response.ok ? 'response-positive' : 'agent-registration'
-      })
-      // makeRequest('home/asdasd').then(response => { 
-      //   console.log(response)
-      //   // change UI depending on response
-      //   this.status = response.ok ? 'response-positive' : 'agent-registration'
-      // });
-    });
+    scanWindosAndPost(this)
   }
 }
 </script>

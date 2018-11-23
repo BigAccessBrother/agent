@@ -23,12 +23,12 @@
         methods: {
             register () {
                 const body = {
-                    email: this.email,
+                    username: this.email,
                     password: this.password,
                     system_serial_number: this.number
                 }
                 console.log('register body: ', body);
-                makeRequest('/api/agent/register/asdasd', 'POST', body)
+                makeRequest('agent/register/', 'POST', body)
                 .then(response => {
                         if (response.ok) {
                             this.$emit('register-agent')
@@ -36,6 +36,7 @@
                             this.email = '';
                             this.password = '';
                             this.message = `registration failed (${response.status})`;
+                            console.log(response)
                         }
                     }    
                 )
