@@ -5,6 +5,7 @@
       v-bind:is="status"
       v-on:register-agent="register"
       :number="number"
+      :report="report"
     ></component>
   </div>
 </template>
@@ -15,6 +16,7 @@ import SendingRequest from './components/SendingRequest';
 import ResponsePositive from './components/ResponsePositive';
 import ResponseNegative from './components/ResponseNegative';
 import AgentRegistration from './components/AgentRegistration';
+import RequestError from './components/RequestError';
 import scanWindows from './utils/scanWindows';
 import { makeRequest } from './utils/requests';
 import scanWindosAndPost from './utils/requests/scanWindowsAndPost';
@@ -24,7 +26,11 @@ export default {
   name: 'app',
   data () {
     return {
-       status: 'collecting-data',
+       status: 'response-negative',
+       report: {
+         key1: "is one",
+         key2: "is two"
+       },
     }
   },
   components: {
@@ -32,15 +38,16 @@ export default {
     SendingRequest,
     ResponsePositive,
     ResponseNegative,
-    AgentRegistration
+    AgentRegistration,
+    RequestError
   },
   methods: {
     register () {
       scanWindosAndPost(this)
     }
   },
-  created () {
-    scanWindosAndPost(this)
-  }
+  // created () {
+  //   scanWindosAndPost(this)
+  // }
 }
 </script>

@@ -9,17 +9,23 @@ export default async (app) => {
       console.log('scan successful', data)
       app.status = 'sending-request';
       app.number = data.system_serial_number;
+
       // send scanData
       makeRequest('response/', 'POST', data).then(response => {
         console.log('posted agent response', response)
         if (response.ok) {
-            response.json().then(responseData => { 
-              console.log('Status report: ', responseData) 
+          response.json().then(responseData => { 
+              console.log('Status report: ', responseData)   
+              // redirect depending on whether machine is safe or not
               app.status = responseData.status === 'ok' ? 'response-positive' : 'response-negative'
+              app.report = responseData;
             })
-        } else {
-            // this here should only happen on 403 once the permission class is in place
+        } else if (response.status == 401 || response.status == 403) {
+            // agent has not been registered yet
             app.status = 'agent-registration';
+        } else {
+            // something else went wrong
+            app.status = 'request-error';
         }
       })
     })
