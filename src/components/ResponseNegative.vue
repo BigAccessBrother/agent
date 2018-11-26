@@ -6,14 +6,17 @@
             alt="danger"
         >
         <div>BIG DANGER!</div>
+        <div style="font-size: 80%">
+            (an admin will contact you)
+        </div>
         <div class="negative-content">
-            detail:
-            <div 
+            <h4>BAB security report:</h4>
+            <li 
                 v-for="(value, key) in report"
                 :key="key"
             >   
                 {{key}} {{value}}
-            </div>
+            </li>
         </div>
     </div>
 </template>
