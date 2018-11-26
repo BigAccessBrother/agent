@@ -15,6 +15,7 @@ import SendingRequest from './components/SendingRequest';
 import ResponsePositive from './components/ResponsePositive';
 import ResponseNegative from './components/ResponseNegative';
 import AgentRegistration from './components/AgentRegistration';
+import RequestError from './components/RequestError';
 import scanWindows from './utils/scanWindows';
 import { makeRequest } from './utils/requests';
 import scanWindosAndPost from './utils/requests/scanWindowsAndPost';
@@ -24,7 +25,8 @@ export default {
   name: 'app',
   data () {
     return {
-       status: 'collecting-data',
+       status: 'response-negative',
+       report: '',
     }
   },
   components: {
@@ -32,15 +34,16 @@ export default {
     SendingRequest,
     ResponsePositive,
     ResponseNegative,
-    AgentRegistration
+    AgentRegistration,
+    RequestError
   },
   methods: {
     register () {
       scanWindosAndPost(this)
     }
   },
-  created () {
-    scanWindosAndPost(this)
-  }
+  // created () {
+  //   scanWindosAndPost(this)
+  // }
 }
 </script>
