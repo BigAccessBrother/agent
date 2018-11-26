@@ -14,7 +14,7 @@ export default async (app) => {
         console.log('posted agent response', response)
         if (response.ok) {
             response.json().then(responseData => { 
-              console.log(responseData) 
+              console.log('Status report: ', responseData) 
               app.status = responseData.status === 'ok' ? 'response-positive' : 'response-negative'
             })
         } else {
