@@ -26,11 +26,8 @@ export default {
   name: 'app',
   data () {
     return {
-       status: 'response-negative',
-       report: {
-         key1: "is one",
-         key2: "is two"
-       },
+       status: 'collecting-data',
+       report: {},
     }
   },
   components: {
@@ -46,8 +43,8 @@ export default {
       scanWindosAndPost(this)
     }
   },
-  // created () {
-  //   scanWindosAndPost(this)
-  // }
+  created () {
+    scanWindosAndPost(this)
+  }
 }
 </script>

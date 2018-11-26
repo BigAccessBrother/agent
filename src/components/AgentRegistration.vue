@@ -2,9 +2,11 @@
     <div>
         <div>One time registration.</div>
         <div>Please enter your email and password</div>
-        <input type="text" placeholder="email" v-model="email">
-        <input type="password" placeholder="password" v-model="password">
-        <button v-on:click="register">register agent</button>
+        <form v:submit.prevent="register">
+            <input type="text" placeholder="email" v-model="email">
+            <input type="password" placeholder="password" v-model="password">
+            <button v-on:click="register">register agent</button>
+        </form>
         <div class="AgentRegistration-error">{{ message }}</div>
     </div>
 </template>
