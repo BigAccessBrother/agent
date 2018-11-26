@@ -1,7 +1,6 @@
 <template>
   <div>
     <h2>BAB Agent</h2>
-    <!-- <div class="text-center"> {{status}} </div> -->
     <component 
       v-bind:is="status"
       v-on:register-agent="register"
@@ -37,7 +36,6 @@ export default {
   },
   methods: {
     register () {
-      console.log('In da app.vue after successful registration. Should scan again now!');
       scanWindosAndPost(this)
     }
   },

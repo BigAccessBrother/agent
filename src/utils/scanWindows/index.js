@@ -40,7 +40,7 @@ const keysSec = [
     ['RealTimeProtectionEnabled', 'real_time_protection_enabled'],
 ];
 
-const keysEncr = [['Protection Status', 'protection_status']]
+const keysEncr = [['Protection Status', 'disk_encryption_status']]
 
 const keysAll = [keysSerial, keysSys, keysSec, keysEncr]
 
