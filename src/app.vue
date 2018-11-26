@@ -5,6 +5,7 @@
       v-bind:is="status"
       v-on:register-agent="register"
       :number="number"
+      :report="report"
     ></component>
   </div>
 </template>
@@ -26,7 +27,10 @@ export default {
   data () {
     return {
        status: 'response-negative',
-       report: '',
+       report: {
+         key1: "is one",
+         key2: "is two"
+       },
     }
   },
   components: {
