@@ -7,6 +7,11 @@ export default async (app) => {
     scanWindows()
     .then(data => {
       console.log('scan successful', data)
+    //   let test = ''
+    //   Object.keys(data).forEach(key => {
+    //       test += `${key}: ${data[key]}\n`
+    //   })
+    //   alert(test);
       app.status = 'sending-request';
       app.number = data.system_serial_number;
 
@@ -15,7 +20,7 @@ export default async (app) => {
         console.log('posted agent response', response)
         if (response.ok) {
           response.json().then(responseData => { 
-              console.log('Status report: ', responseData)   
+              console.log('Status report: ', responseData)      
               // redirect depending on whether machine is safe or not
               app.status = responseData.status === 'ok' ? 'response-positive' : 'response-negative'
               app.report = responseData;
@@ -26,6 +31,7 @@ export default async (app) => {
         } else {
             // something else went wrong
             app.status = 'request-error';
+            response.json().then(data => { console.log('error', data)})
         }
       })
     })
