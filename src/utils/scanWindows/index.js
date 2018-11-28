@@ -1,3 +1,4 @@
+const { remote } = require('electron');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 // exec is imported as an asynchronous function
@@ -123,7 +124,7 @@ const getAsync = async cmds => {
         values => { 
             const data = [
                 getValues(values[0], keysAll[0]),
-                { agent_version: process.env.npm_package_version },
+                { agent_version: remote.app.getVersion() },
                 getValues(values[1], keysAll[1]),
                 getValues(values[2], keysAll[2]),
                 getValues(values[3], keysAll[3]),
