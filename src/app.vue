@@ -3,7 +3,7 @@
     <h2>BAB Agent</h2>
     <component 
       v-bind:is="status"
-      v-on:register-agent="register"
+      v-on:reset-agent="reset"
       :number="number"
       :report="report"
     ></component>
@@ -39,7 +39,7 @@ export default {
     RequestError
   },
   methods: {
-    register () {
+    reset () {
       scanWindosAndPost(this)
     }
   },

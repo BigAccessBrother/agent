@@ -1,4 +1,4 @@
-import { baseAPIUrl } from '../../constants';
+import baseAPIUrl from '../../constants';
 
 export const makeRequest = async (endpoint, method = 'GET', body = null) => {
     const init = {

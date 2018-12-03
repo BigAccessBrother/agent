@@ -33,7 +33,7 @@
                 makeRequest('agent/register/', 'POST', body)
                 .then(response => {
                         if (response.ok) {
-                            this.$emit('register-agent')
+                            this.$emit('reset-agent')
                         } else {
                             this.email = '';
                             this.password = '';

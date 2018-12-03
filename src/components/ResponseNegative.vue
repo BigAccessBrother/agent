@@ -18,12 +18,18 @@
                 {{key}} {{value}}
             </li>
         </div>
+        <scan-timer v-on:reset-agent="$emit('reset-agent')"></scan-timer>
     </div>
 </template>
 
 <script>
+    import ScanTimer from './ScanTimer';
+
     export default {
         name: 'response-negative',
-        props: ['report']
+        props: ['report'],
+        components: {
+            ScanTimer
+        },
     }
 </script>
