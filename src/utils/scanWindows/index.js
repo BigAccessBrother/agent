@@ -14,7 +14,7 @@ const commands = [
     'wmic product | more'
 ]
 
-// all the keys we are looking for, paired with how they should be called in our request
+// all the keys we are looking for, paired with how they should be called in the body of our request
 const keysSerial = [['SerialNumber', 'system_serial_number']];
 
 const keysSys = [
@@ -66,61 +66,67 @@ const getValues = (arr, keys, res = {}) => {
     return res
 }
 
-// get the startup apps into a nice array of objects
-const getStartup = (arr1, res = []) => {
-    // get rid of that one line that was too long and put on a new line
-    const arr = arr1.map((e, i, arr) => {
+// get rid of that one line that breaks because it's too long
+const cleanStartUp = arr => {
+    const res = arr.map((e, i, arr) => {
         if(e.includes(':')) {
             if (arr[i + 1] && !arr[i + 1].includes(':')) {
                 return e + arr[i + 1].trim()
             }
             return e
         }
-    }).filter(e => e && e.includes(':'));
-    // turn 4 lines at a time into an object
-    for (let i = 0; i < arr.length / 4; i++) {
+    })
+    // clean again
+    return res.filter(e => e && e.includes(':'));
+}
+
+// get the startup apps into a nice array of objects
+const getStartup = (arr, res = []) => {
+    const arr2 = cleanStartUp(arr);
+    for (let i = 0; i < arr2.length / 4; i++) {
         res.push({
-            name: val(arr[i * 4]),
-            command: val(arr[i * 4 + 1]),
-            location: val(arr[i * 4 + 2]),
-            user: val(arr[i * 4 + 3]),
+            name: val(arr2[i * 4]),
+            command: val(arr2[i * 4 + 1]),
+            location: val(arr2[i * 4 + 2]),
+            user: val(arr2[i * 4 + 3]),
         })
     }
     return { startup_apps: res }
 }
 
 // get the entry starting at a particular index out of a long string
-const getKeyword = (str, indKey) => str.substring(indKey, str.indexOf('  ', indKey))
+const getKeywordByIndex = (str, indKey) => str.substring(indKey, str.indexOf('  ', indKey))
 
 // get the installed apps into a nice array of objects
 const getInstalled = (arr, res = []) => {
-    // find out where in lines our info sits
+    // get indeces out of first line
     const indName = arr[0].indexOf('Name');
     const indVendor = arr[0].indexOf('Vendor');
     const indVersion = arr[0].indexOf('Version');
     const indDate = arr[0].indexOf('InstallDate');
-    // retrieve our info from every line and push it to res as an object
+    // retrieve our info from every subsequent line and push it to res as an object
     for (let i = 1; i < arr.length; i++) {
         res.push({
-            name: getKeyword(arr[i], indName),
-            vendor: getKeyword(arr[i], indVendor),
-            version: getKeyword(arr[i], indVersion),
-            install_date: getKeyword(arr[i], indDate)
+            name: getKeywordByIndex(arr[i], indName),
+            vendor: getKeywordByIndex(arr[i], indVendor),
+            version: getKeywordByIndex(arr[i], indVersion),
+            install_date: getKeywordByIndex(arr[i], indDate)
         });
     }
     return { installed_apps: res }
 }
 
-// this is where all the magic happens
-const getAsync = async cmds => {
-    // execute all our commands asynchronously
-    // then split their output into arrays by lines 
-    const arr = cmds.map(async cmd => {
-        const res = await exec(cmd)
-        return res.stdout.split('\n').filter(e => e.length > 2)
-    })
+// execute command and split output by line
+const execAndClean = async cmd => {
+    const output = await exec(cmd)
+    return output.stdout.split('\n').filter(e => e.length > 2)
+}
+
+// put everything together
+const retrieveAllAndFormatAsync = async cmds => {
+    const promises = cmds.map(execAndClean)
     // resolve promises and get output in the format we want
-    return Promise.all(arr).then(
+    return Promise.all(promises).then(
         values => { 
             const data = [
                 getValues(values[0], keysAll[0]),
@@ -137,10 +143,7 @@ const getAsync = async cmds => {
     )
 }
 
-// what we export:
 // this returns the promise of a nicely formatted object for the body of a post request
-const scanWindows = () => {
-    return getAsync(commands);
+export default () => {
+    return retrieveAllAndFormatAsync(commands);
 }
-
-export default scanWindows;

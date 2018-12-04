@@ -8,6 +8,5 @@ export const makeRequest = async (endpoint, method = 'GET', body = null) => {
     if (body) {
         init.body = JSON.stringify(body);
     }
-    console.log('in da init', init)
     return fetch(baseAPIUrl + endpoint, init)
 }
