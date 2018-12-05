@@ -12,7 +12,7 @@
     "lint": "echo \"No linting configured\""
   },
   "keywords": [],
-  "author": "pasca",
+  "author": "Pascal Rueegger",
   "license": "MIT",
   "config": {
     "forge": {
@@ -30,8 +30,11 @@
       },
       "electronPackagerConfig": {
         "packageManager": "npm",
+        "icon": "src/assets/logo/BABlogo1.png",
         "win32metadata": {
-          "requested-execution-level": "requireAdministrator"
+          "requested-execution-level": "requireAdministrator",
+          "loadingGif": "src/assets/gif/loading.gif",
+          "setupIcon": "src/assets/logo/BABlogo1.png"
         }
       },
       "electronWinstallerConfig": {
