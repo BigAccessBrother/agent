@@ -15,10 +15,11 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     width: 250,
     height: 340,
+    icon: 'src/assets/logo/BABlogo1.png',
     // remove for prod!
-    webPreferences: {
-      webSecurity: false
-    }
+    // webPreferences: {
+    //   webSecurity: false
+    // }
   });
 
   // and load the index.html of the app.
